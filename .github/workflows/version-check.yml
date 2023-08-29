@@ -7,10 +7,15 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   version-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Check version
-        uses: https://github.com/Azure/terraform-azurerm-avm-template/.github/actions/version-check@main
+        uses: Azure/terraform-azurerm-avm-template/.github/actions/version-check@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
