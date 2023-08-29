@@ -11,3 +11,4 @@ configuration:
       allowsForcePushes: false
       allowsDeletions: false
       requiresLinearHistory: true
+      requireCodeOwnersReview: true
