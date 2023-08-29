@@ -8,6 +8,7 @@ If it is set to false, then no telemetry will be collected.
 DESCRIPTION
 }
 
+# This is required for most resource modules
 variable "resource_group_name" {
   type        = string
   description = "The resource group where the resources will be deployed."
