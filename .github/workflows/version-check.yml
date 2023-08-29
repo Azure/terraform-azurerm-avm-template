@@ -1,0 +1,16 @@
+---
+name: version-check
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check version
+        uses: https://github.com/Azure/terraform-azurerm-avm-template/.github/actions/version-check@main
