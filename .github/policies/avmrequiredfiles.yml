@@ -12,12 +12,14 @@ configuration:
       repository. A pull request has been opened to add the
       missing files. When the pr is merged this issue will be
       closed automatically.
-    prTitle: 'feat: add AVM mandatory file(s) to this repo'
+    prTitle: "feat: add AVM mandatory file(s) to this repo"
     prBody: |
       This repository needs the standard workflow and policy files to ensure compliance.
     file:
       - path: .github/workflows/version-check.yml
         prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/workflows/version-check.yml
+      - path: .github/workflows/docs-check.yml
+        prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/workflows/docs-check.yml
       - path: .github/policies/avmrequiredfiles.yml
         prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/policies/avmrequiredfiles.yml
       - path: .github/policies/branchprotection.yml
