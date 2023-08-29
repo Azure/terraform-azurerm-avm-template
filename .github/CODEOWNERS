@@ -1,6 +1,7 @@
 # AVM core team owns key files
 .github/policies/ @Azure/avm-core-team
 .github/workflows/version-check.yml @Azure/avm-core-team
+.github/CODEOWNERS @Azure/avm-core-team
 
 # No ownership for the rest of the files
 *
