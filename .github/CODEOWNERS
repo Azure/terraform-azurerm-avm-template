@@ -2,6 +2,3 @@
 .github/policies/ @Azure/avm-admins @Azure/avm-core-team-technical
 .github/workflows/version-check.yml @Azure/avm-admins @Azure/avm-core-team-technical
 .github/CODEOWNERS @Azure/avm-admins @Azure/avm-core-team-technical
-
-# No ownership for the rest of the files
-*
