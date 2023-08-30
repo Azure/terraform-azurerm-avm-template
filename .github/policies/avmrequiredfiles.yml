@@ -20,6 +20,8 @@ configuration:
         prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/workflows/version-check.yml
       - path: .github/workflows/docs-check.yml
         prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/workflows/docs-check.yml
+      - path: Makefile
+        prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/Makefile
       - path: .github/policies/avmrequiredfiles.yml
         prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/policies/avmrequiredfiles.yml
       - path: .github/policies/branchprotection.yml
