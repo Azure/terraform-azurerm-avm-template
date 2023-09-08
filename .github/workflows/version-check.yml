@@ -15,7 +15,7 @@ jobs:
   version-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Check version
         uses: Azure/terraform-azurerm-avm-template/.github/actions/version-check@main
         with:
