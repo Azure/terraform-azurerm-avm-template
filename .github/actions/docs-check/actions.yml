@@ -1,0 +1,33 @@
+author: AVM
+name: Docs check
+description: Checks that documentation has been updated on PR
+inputs:
+runs:
+  using: composite
+  steps:
+    - name: Setup go
+      uses: actions/setup-go@v4
+      with:
+        go-version: "1.21.x"
+        # cache-dependency-path: tests/go.sum
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
+
+    - name: Install tools
+      run: make tools
+
+    - name: Check fmt and docs
+      run: |
+        echo "==> Running make fmt & make docs"
+        make fmt
+        make docs
+        echo "==> Testing for changes to tracked files"
+        CHANGES=$(git status -suno)
+        if [ "$CHANGES" ]; then
+          echo "Repository formatting or documentation is not correct."
+          echo "Run 'make fmt && make docs' locally and commit the changes to fix."
+          exit 1
+        fi
