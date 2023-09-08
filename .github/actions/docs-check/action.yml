@@ -1,7 +1,6 @@
 author: AVM
 name: Docs check
 description: Checks that documentation has been updated on PR
-inputs:
 runs:
   using: composite
   steps:
@@ -18,8 +17,10 @@ runs:
 
     - name: Install tools
       run: make tools
+      shell: bash
 
     - name: Check fmt and docs
+      shell: bash
       run: |
         echo "==> Running make fmt & make docs"
         make fmt
