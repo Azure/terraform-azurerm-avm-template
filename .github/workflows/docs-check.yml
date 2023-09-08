@@ -17,7 +17,7 @@
       runs-on: ubuntu-latest
       steps:
         - name: Checkout repository
-          uses: actions/checkout@v3
-        - uses: actions/checkout@v3
+          uses: actions/checkout@v4
+        - uses: actions/checkout@v4
         - name: Check docs
           uses: Azure/terraform-azurerm-avm-template/.github/actions/docs-check@main
