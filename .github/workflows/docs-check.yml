@@ -1,23 +1,22 @@
 ---
-  name: docs-check
+name: docs-check
 
-  on:
-    pull_request:
-      types: ['opened', 'reopened', 'synchronize']
-    merge_group:
-    workflow_dispatch:
+on:
+  pull_request:
+    types: ['opened', 'reopened', 'synchronize']
+  merge_group:
+  workflow_dispatch:
 
-  concurrency:
-    group: docsfmttest-${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref || github.run_id }}
-    cancel-in-progress: true
+concurrency:
+  group: docsfmttest-${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
-  jobs:
-    docsfmttest:
-      name: docs-check
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-        - uses: actions/checkout@v4
-        - name: Check docs
-          uses: Azure/terraform-azurerm-avm-template/.github/actions/docs-check@main
+jobs:
+  docsfmttest:
+    name: docs-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Check docs
+        uses: Azure/terraform-azurerm-avm-template/.github/actions/docs-check@main
