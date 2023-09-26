@@ -18,8 +18,8 @@ configuration:
     file:
       - path: .github/workflows/version-check.yml
         prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/workflows/version-check.yml
-      - path: .github/workflows/docs-check.yml
-        prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/workflows/docs-check.yml
+      - path: .github/workflows/linting.yml
+        prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/.github/workflows/linting.yml
       - path: Makefile
         prContentLink: https://raw.githubusercontent.com/Azure/terraform-azurerm-avm-template/main/Makefile
       - path: .github/policies/avmrequiredfiles.yml
