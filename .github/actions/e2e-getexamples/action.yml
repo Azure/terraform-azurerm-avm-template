@@ -4,7 +4,7 @@ description: Gets example directories from `examples/` and outputs them to the n
 outputs:
   examples:
     description: The examples to test
-    value: steps.getexamples.outputs.examples
+    value: ${{ steps.getexamples.outputs.examples }}
 runs:
   using: composite
   steps:
