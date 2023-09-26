@@ -1,0 +1,21 @@
+author: AVM
+name: e2e - getexamples
+description: Gets example directories from `examples/` and outputs them to the next step
+outputs:
+  examples:
+    description: The examples to test
+    value: steps.getexamples.outputs.examples
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-go@v4
+      with:
+        go-version: 1.21
+
+    - name: get examples
+      id: getexamples
+      run: |
+        go install github.com/matt-FFFFFF/jsonls@v0.1.0
+        echo examples="$(jsonls -d)" >> "$GITHUB_OUTPUT"
+      working-directory: examples
+      shell: bash
