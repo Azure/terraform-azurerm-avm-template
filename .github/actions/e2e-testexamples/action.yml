@@ -1,0 +1,47 @@
+author: AVM
+name: e2e - testexamples
+description: Tests the example supplied in the input. Needs checkout and Azure login prior.
+inputs:
+  example:
+    description: The example directory to test
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ">=1.5.0"
+
+    - name: terraform init
+      run: terraform init
+      working-directory: examples/${{ inputs.example }}
+      shell: bash
+
+    - name: terraform apply
+      run: terraform apply -auto-approve
+      working-directory: examples/${{ inputs.example }}
+      shell: bash
+
+    - name: terraform plan
+      id: plan
+      run: |
+        terraform plan -detailed-exitcode
+        echo PLANCODE="$?" >> "$GITHUB_OUTPUT"
+      continue-on-error: true
+      working-directory: examples/${{ inputs.example }}
+      shell: bash
+
+    - name: check idempotent
+      run: |
+        echo Error: terraform plan code is ${{ steps.plan.outputs.PLANCODE }}
+        exit 1
+      working-directory: examples/${{ inputs.example }}
+      shell: bash
+      if: steps.plan.outputs.PLANCODE != 0
+
+    - name: terraform destroy
+      run: terraform destroy -auto-approve
+      working-directory: examples/${{ inputs.example }}
+      shell: bash
+      if: always()

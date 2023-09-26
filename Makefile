@@ -4,8 +4,6 @@ docs:
 
 .PHONY: fmt
 fmt:
-	@echo "==> Fixing source code with gofmt..."
-	find ./tests -name '*.go' | grep -v vendor | xargs gofmt -s -w
 	@echo "==> Fixing Terraform code with terraform fmt..."
 	terraform fmt -recursive
 	@echo "==> Fixing embedded Terraform with terrafmt..."
