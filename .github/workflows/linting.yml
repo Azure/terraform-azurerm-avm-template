@@ -1,5 +1,5 @@
 ---
-name: docs-check
+name: linting
 
 on:
   pull_request:
@@ -19,7 +19,13 @@ jobs:
     name: docs-check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: checkout repository
         uses: actions/checkout@v4
-      - name: Check docs
+
+      - name: check docs
         uses: Azure/terraform-azurerm-avm-template/.github/actions/docs-check@main
+
+      - name: lint terraform
+        uses: Azure/terraform-azurerm-avm-template/.github/actions/linting@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
