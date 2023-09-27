@@ -11,12 +11,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: docsfmttest-${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref || github.run_id }}
+  group: linting-${{ github.event.pull_request.head.repo.full_name }}/${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
-  docsfmttest:
-    name: docs-check
+  linting:
+    name: linting
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
