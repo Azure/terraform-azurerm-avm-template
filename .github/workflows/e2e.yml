@@ -18,7 +18,7 @@ jobs:
       examples: ${{ steps.getexamples.outputs.examples }}
     steps:
       - uses: actions/checkout@v4
-      - name: Check docs
+      - name: Get examples
         id: getexamples
         uses: Azure/terraform-azurerm-avm-template/.github/actions/e2e-getexamples@main
         with:
