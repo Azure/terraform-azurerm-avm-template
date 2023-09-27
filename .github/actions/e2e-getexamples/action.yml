@@ -1,6 +1,10 @@
 author: AVM
 name: e2e - getexamples
 description: Gets example directories from `examples/` and outputs them to the next step
+inputs:
+  github-token:
+    description: The GitHub token to use for the API calls
+    required: true
 outputs:
   examples:
     description: The examples to test
@@ -8,14 +12,24 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-go@v4
-      with:
-        go-version: 1.21
-
     - name: get examples
       id: getexamples
       run: |
-        go install github.com/matt-FFFFFF/jsonls@v0.1.0
+        # Get latest release from GitHub API and get download URL for the Linux x64 binary
+        curl -sL -H "Authorization: Bearer ${{ inputs.github-token }}" https://api.github.com/repos/matt-FFFFFF/jsonls/releases/latest \
+          | jq -r '.assets[] | select( .name | test("linux_amd64")) | .browser_download_url') \
+          | tar -xvz
+
+        # Download the binary
+        curl -sL "$URL" | tar -xvz jsonls
+
+        # Ensure exec bit set
+        sudo chmod a+x jsonls
+
+        # Move binary to path
+        sudo mv jsonls /usr/local/bin/jsonls
+
+        # Get the examples
         echo examples="$(jsonls -d)" >> "$GITHUB_OUTPUT"
       working-directory: examples
       shell: bash
