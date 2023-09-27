@@ -29,6 +29,7 @@ runs:
         CHANGES=$(git status -suno)
         if [ "$CHANGES" ]; then
           echo "Repository formatting or documentation is not correct."
+          echo "$CHANGES"
           echo "Run 'make fmt && make docs' locally and commit the changes to fix."
           exit 1
         fi
