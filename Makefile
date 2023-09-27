@@ -1,6 +1,9 @@
 .PHONY: docs
 docs:
+	@echo "==> Generating module documentation..."
 	terraform-docs -c .terraform-docs.yml .
+	@echo "==> Generating examples documentation..."
+	cd examples && for d in $$(ls -d */); do terraform-docs  $$d; done
 
 .PHONY: fmt
 fmt:

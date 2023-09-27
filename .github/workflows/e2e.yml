@@ -30,6 +30,7 @@ jobs:
     environment: test
     env:
       TF_IN_AUTOMATION: 1
+      TF_VAR_enable_telemetry: false
     strategy:
       matrix:
         example: ${{ fromJson(needs.getexamples.outputs.examples) }}
@@ -43,7 +44,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: test example
+      - name: Test example
         uses: Azure/terraform-azurerm-avm-template/.github/actions/e2e-testexamples@main
         with:
           example: ${{ matrix.example }}
