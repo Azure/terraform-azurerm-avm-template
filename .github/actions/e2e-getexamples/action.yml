@@ -16,11 +16,10 @@ runs:
       id: getexamples
       run: |
         # Get latest release from GitHub API and get download URL for the Linux x64 binary
-        curl -sL -H "Authorization: Bearer ${{ inputs.github-token }}" https://api.github.com/repos/matt-FFFFFF/jsonls/releases/latest \
-          | jq -r '.assets[] | select( .name | test("linux_amd64")) | .browser_download_url') \
-          | tar -xvz
+        $URL=$(curl -sL -H "Authorization: Bearer ${{ inputs.github-token }}" https://api.github.com/repos/matt-FFFFFF/jsonls/releases/latest \
+          | jq -r '.assets[] | select( .name | test("linux_amd64")) | .browser_download_url')
 
-        # Download the binary
+        # Download the binary and extract
         curl -sL "$URL" | tar -xvz jsonls
 
         # Ensure exec bit set
