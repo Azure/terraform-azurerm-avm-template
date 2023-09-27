@@ -3,7 +3,17 @@
 
 This is a template repo for Terraform Azure Verified Modules.
 
-TODO: Provide instructions or links to spec to explain how to use this template.
+Things to do:
+
+1. Set up a GitHub repo environment called `test`.
+1. Configure environment protection rule to ensure that approval is required before deploying to this environment.
+1. Create a user-assigned managed identity in your test subscription.
+1. Create a role assignment for the managed identity on your test subscription, use the minimum required role.
+1. Configure federated identity credentials on the user assigned managed identity. Use the GitHub environment.
+1. Create the following environment secrets on the `test` environment:
+   1. AZURE\_CLIENT\_ID
+   1. AZURE\_TENANT\_ID
+   1. AZURE\_SUBSCRIPTION\_ID
 
 <!-- markdownlint-disable MD033 -->
 ## Requirements
@@ -49,7 +59,7 @@ The following input variables are optional (have default values):
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
 Description: This variable controls whether or not telemetry is enabled for the module.  
-For more information see https://aka.ms/avm/telemetry.  
+For more information see https://aka.ms/avm/telemetryinfo.  
 If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
