@@ -5,13 +5,17 @@ This deploys the module in its simplest form.
 
 ```hcl
 terraform {
-  required_version = ">= 1.0.0"
+  required_version = ">= 1.3.0"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = ">= 3.7.0, < 4.0.0"
     }
   }
+}
+
+provider "azurerm" {
+  features {}
 }
 
 variable "enable_telemetry" {
@@ -50,7 +54,7 @@ module "MYMODULE" {
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.0.0)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.3.0)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 3.7.0, < 4.0.0)
 
