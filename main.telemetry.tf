@@ -1,5 +1,5 @@
 resource "random_id" "telem" {
-  count       = local.enable_telemetry ? 1 : 0
+  count       = var.enable_telemetry ? 1 : 0
   byte_length = 4
 }
 
