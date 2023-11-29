@@ -1,7 +1,11 @@
 # TODO: insert locals here.
 
+data "azurerm_resource_group" "parent" {
+  name = var.resource_group_name
+}
+
 locals {
-  location                           = var.location != null ? var.location : data.azurerm_resource_group.rg.location
+  location                           = var.location != null ? var.location : data.azurerm_resource_group.parent.location
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
 }
 
