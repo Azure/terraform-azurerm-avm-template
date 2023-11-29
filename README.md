@@ -14,6 +14,7 @@ Things to do:
    1. AZURE\_CLIENT\_ID
    1. AZURE\_TENANT\_ID
    1. AZURE\_SUBSCRIPTION\_ID
+1. Search and update TODOs within the code and remove the TODO comments once complete.
 
 <!-- markdownlint-disable MD033 -->
 ## Requirements
@@ -59,7 +60,7 @@ The following input variables are optional (have default values):
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
 Description: This variable controls whether or not telemetry is enabled for the module.  
-For more information see https://aka.ms/avm/telemetryinfo.  
+For more information see <https://aka.ms/avm/telemetryinfo>.  
 If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
