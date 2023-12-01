@@ -36,12 +36,13 @@ variable "name" {
 // remove only if not supported by the resource
 variable "customer_managed_key" {
   type = object({
-    key_vault_resource_id              = string
-    key_name                           = string
+    key_vault_resource_id              = optional(string)
+    key_name                           = optional(string)
     key_version                        = optional(string, null)
     user_assigned_identity_resource_id = optional(string, null)
   })
-  default = {}
+  description = "Customer managed keys that should be associated with the resource."
+  default     = {}
 }
 
 variable "diagnostic_settings" {
@@ -108,7 +109,8 @@ variable "managed_identities" {
     system_assigned            = optional(bool, false)
     user_assigned_resource_ids = optional(set(string), [])
   })
-  default = {}
+  description = "Managed identities to be created for the resource."
+  default     = {}
 }
 
 variable "private_endpoints" {
@@ -189,7 +191,8 @@ DESCRIPTION
 }
 
 variable "tags" {
-  type    = map(any)
-  default = {}
+  type        = map(any)
+  description = "The map of tags to be applied to the resource"
+  default     = {}
 }
 
