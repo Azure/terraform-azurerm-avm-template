@@ -7,7 +7,7 @@ data "azurerm_resource_group" "parent" {
 resource "azurerm_TODO_the_resource_for_this_module" "this" {
   name                = var.name # calling code must supply the name
   resource_group_name = var.resource_group_name
-  location            = try(data.azurerm_resource_group.parent[0].location, var.location)
+  location            = coalesce(var.location, local.resource_group_location)
   // etc
 }
 
