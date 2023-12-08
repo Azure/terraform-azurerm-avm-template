@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   linting:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template'
     name: linting
     runs-on: ubuntu-latest
     steps:

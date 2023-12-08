@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   version-check:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
