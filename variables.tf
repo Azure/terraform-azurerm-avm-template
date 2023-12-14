@@ -32,8 +32,9 @@ variable "name" {
   }
 }
 
-// required AVM interfaces 
-// remove only if not supported by the resource
+# required AVM interfaces
+# remove only if not supported by the resource
+# tflint-ignore: terraform_unused_declarations
 variable "customer_managed_key" {
   type = object({
     key_vault_resource_id              = optional(string)
@@ -104,6 +105,7 @@ variable "lock" {
   }
 }
 
+# tflint-ignore: terraform_unused_declarations
 variable "managed_identities" {
   type = object({
     system_assigned            = optional(bool, false)
@@ -190,6 +192,7 @@ A map of role assignments to create on this resource. The map key is deliberatel
 DESCRIPTION
 }
 
+# tflint-ignore: terraform_unused_declarations
 variable "tags" {
   type        = map(any)
   description = "The map of tags to be applied to the resource"

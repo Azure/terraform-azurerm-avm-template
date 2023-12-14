@@ -18,7 +18,7 @@ jobs:
     outputs:
       examples: ${{ steps.getexamples.outputs.examples }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
       - name: get examples
         id: getexamples
         uses: Azure/terraform-azurerm-avm-template/.github/actions/e2e-getexamples@main
@@ -38,7 +38,7 @@ jobs:
         example: ${{ fromJson(needs.getexamples.outputs.examples) }}
       max-parallel: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
 
       - uses: Azure/login@v1
         with:

@@ -4,49 +4,12 @@ description: Checks that documentation has been updated on PR
 runs:
   using: composite
   steps:
-    - name: setup go
-      uses: actions/setup-go@v4
-      with:
-        go-version: "1.21.x"
-        # cache-dependency-path: tests/go.sum
-
-    - name: setup Terraform
-      uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_wrapper: false
-
-    - name: install tools
-      shell: bash
-      run: |
-        go install github.com/katbyte/terrafmt@latest
-        go install github.com/terraform-docs/terraform-docs@latest
-
     - name: fmt check
       shell: bash
       run: |
-        echo "==> Fixing Terraform code with terraform fmt..."
-        terraform fmt -recursive
-        echo "==> Fixing embedded Terraform with terrafmt..."
-        find . | egrep ".md|.tf" | grep -v README.md | sort | while read f; do terrafmt fmt $f; done
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make fmtcheck
 
     - name: docs check
       shell: bash
       run: |
-        echo "==> Generating module documentation..."
-        terraform-docs -c .terraform-docs.yml .
-        echo "==> Generating examples documentation..."
-        cd examples && for d in $(ls -d */); do terraform-docs $d; done
-
-    - name: check for changes
-      shell: bash
-      run: |
-        echo "==> Testing for changes to tracked files"
-        CHANGES=$(git status -suno)
-        if [ "$CHANGES" ]; then
-          echo "Repository formatting or documentation is not correct."
-          echo
-          git diff
-          echo
-          echo "Run 'make fmt && make docs' locally and commit the changes to fix."
-          exit 1
-        fi
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make docscheck
