@@ -13,12 +13,11 @@ permissions:
 
 jobs:
   getexamples:
-    if: github.event.repository.name != 'terraform-azurerm-avm-template'
     runs-on: ubuntu-latest
     outputs:
       examples: ${{ steps.getexamples.outputs.examples }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
       - name: get examples
         id: getexamples
         uses: Azure/terraform-azurerm-avm-template/.github/actions/e2e-getexamples@main
@@ -26,8 +25,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   testexamples:
-    if: github.event.repository.name != 'terraform-azurerm-avm-template'
-    runs-on: [ self-hosted, 1ES.Pool=terraform-azurerm-container-apps ]
+    runs-on: [ self-hosted, 1ES.Pool=terraform-azurerm-avm-template ]
     needs: getexamples
     environment: test
     env:
@@ -48,13 +46,10 @@ jobs:
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e MSI_ID -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_USE_MSI=true mcr.microsoft.com/azterraform:latest make test-example
-        with:
-          example: ${{ matrix.example }}
 
   # This job is only run when all the previous jobs are successful.
   # We can use it for PR validation to ensure all examples have completed.
   testexamplescomplete:
-    if: github.event.repository.name != 'terraform-azurerm-avm-template'
     runs-on: ubuntu-latest
     needs: testexamples
     steps:
