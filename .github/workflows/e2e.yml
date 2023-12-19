@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   getexamples:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template'
     runs-on: ubuntu-latest
     outputs:
       examples: ${{ steps.getexamples.outputs.examples }}
@@ -25,6 +26,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   testexamples:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template'
     runs-on: [ self-hosted, 1ES.Pool=terraform-azurerm-avm-template ]
     needs: getexamples
     environment: test
@@ -50,6 +52,7 @@ jobs:
   # This job is only run when all the previous jobs are successful.
   # We can use it for PR validation to ensure all examples have completed.
   testexamplescomplete:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template'
     runs-on: ubuntu-latest
     needs: testexamples
     steps:
