@@ -27,7 +27,7 @@ jobs:
 
   testexamples:
     if: github.event.repository.name != 'terraform-azurerm-avm-template'
-    runs-on: [ self-hosted, 1ES.Pool=terraform-azurerm-avm-template ]
+    runs-on: ${{ (vars.AVM_USE_CLOUD_RUNNER) && 'ubuntu-latest' || '[self-hosted, 1ES.Pool=terraform-azurerm-avm-template]' }}
     needs: getexamples
     environment: test
     env:
@@ -41,7 +41,8 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
 
-      - name: Test example
+      - name: Test example (self-hosted runner)
+        if: ${{ vars.AVM_USE_CLOUD_RUNNER == '' }}      
         shell: bash
         run: |
           set -e
@@ -49,6 +50,20 @@ jobs:
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e MSI_ID -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_USE_MSI=true mcr.microsoft.com/azterraform:latest make test-example
+
+      - name: Set up Azure CLI and login (cloud runner)
+        if: ${{ vars.AVM_USE_CLOUD_RUNNER }}
+        uses: Azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Test example (cloud runner)
+        if: ${{ vars.AVM_USE_CLOUD_RUNNER }}
+        uses: Azure/terraform-azurerm-avm-template/.github/actions/e2e-testexamples@main
+        with:
+          example: ${{ matrix.example }}
 
   # This job is only run when all the previous jobs are successful.
   # We can use it for PR validation to ensure all examples have completed.
