@@ -1,0 +1,29 @@
+author: AVM
+name: avmfix
+description: Ensures that avmfix has been run.
+inputs:
+  github-token:
+    description: The GitHub token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: run avmfix
+      shell: bash
+      run: |
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make autofix
+
+    - name: detect changes
+      shell: bash
+      run: |
+        if [ -z $(git status -s) ]; then
+          echo "No changes detected"
+          exit 0
+        else
+          echo "Autofix changes detected, please run:"
+          echo "> docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make autofix"
+          echo
+          echo "Then commit and push the changes"
+          exit 1
+        fi
