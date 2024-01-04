@@ -16,4 +16,4 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make $1
+docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make "$1"
