@@ -4,8 +4,10 @@ usage () {
   echo "Usage: avm <make target>"
 }
 
-if [ ! "$(command -v docker)" ]; then
-    echo "Error: Docker is not installed. Please install docker first."
+CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-docker}
+
+if [ ! "$(command -v "$CONTAINER_RUNTIME")" ]; then
+    echo "Error: $CONTAINER_RUNTIME is not installed. Please install $CONTAINER_RUNTIME first."
     exit 1
 fi
 
@@ -16,4 +18,4 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-docker run --rm -v "$(pwd)":/src -w /src mcr.microsoft.com/azterraform make "$1"
+$CONTAINER_RUNTIME run --rm -v "$(pwd)":/src -w /src mcr.microsoft.com/azterraform make "$1"
