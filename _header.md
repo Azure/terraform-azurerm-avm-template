@@ -16,7 +16,7 @@ Things to do:
 1. Search and update TODOs within the code and remove the TODO comments once complete.
 
 > [!IMPORTANT]
-> As the overall AVM framework is not GA (generally available) yet - the CI framework and test automation is not (fully) functional and implemented across all languages yet, breaking changes are expected, and additional customer feedback is yet to be gathered and incorporated - modules **MUST NOT** be published at version `1.0.0` or higher at this time.
+> As the overall AVM framework is not GA (generally available) yet - the CI framework and test automation is not fully functional and implemented across all supported languages yet - breaking changes are expected, and additional customer feedback is yet to be gathered and incorporated. Hence, modules **MUST NOT** be published at version `1.0.0` or higher at this time.
 > 
 > All module **MUST** be published as a pre-release version (e.g., `0.1.0`, `0.1.1`, `0.2.0`, etc.) until the AVM framework becomes GA.
 > 
