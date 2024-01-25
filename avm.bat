@@ -18,7 +18,6 @@ IF "%~1"=="" (
 )
 
 REM Run the make target with CONTAINER_RUNTIME
-%CONTAINER_RUNTIME% pull mcr.microsoft.com/azterraform
-%CONTAINER_RUNTIME% run --rm -v "%cd%":/src -w /src mcr.microsoft.com/azterraform make %1
+%CONTAINER_RUNTIME% run --pull always --rm -v "%cd%":/src -w /src mcr.microsoft.com/azterraform make %1
 
 ENDLOCAL
