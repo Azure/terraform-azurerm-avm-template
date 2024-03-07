@@ -44,3 +44,6 @@ avm.tflint_example.hcl
 
 # MacOS
 .DS_Store
+
+# Powershell scripts for maintainers
+Set-AvmGitHubLabels.ps1
