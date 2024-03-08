@@ -1,7 +1,7 @@
 name: AVM - Module Issue ➕🐛🔒
 description: Want to request a new Module feature or report a bug? Let us know!
 title: "[AVM Module Issue]: "
-labels: ["Type: AVM :a: :v: :m:", "Needs: Triage :mag:"]
+labels: ["Needs: Triage :mag:", "Language: Terraform :globe_with_meridians:"]
 projects: ["Azure/566"]
 body:
   - type: markdown
@@ -19,6 +19,14 @@ body:
       description: By submitting this issue, you confirm that you have searched for previous/existing GitHub issues to avoid creating a duplicate.
       options:
         - label: I have checked for previous/existing GitHub issues
+          required: true
+  - type: checkboxes
+    id: module-specific-checks
+    attributes:
+      label: Module specific issue
+      description: By submitting this issue, you confirm that this issue is about this AVM module and not about the resource itself, or how to use Terraform.
+      options:
+        - label: I confirm that this issue is about this AVM module and not about the resource itself, or how to use Terraform.
           required: true
   - type: dropdown
     id: issue-type
@@ -39,13 +47,6 @@ body:
       description: Please provide which version(s) of the module does this issue apply to.
     validations:
       required: false
-  - type: textarea
-    id: question-feedback-text
-    attributes:
-      label: Description
-      description: Please describe the issue!
-    validations:
-      required: true
   - type: input
     id: correlation-id
     attributes:
@@ -53,3 +54,17 @@ body:
       description: Please provide a correlation id if available and appropriate.
     validations:
       required: false
+  - type: textarea
+    id: question-feedback-text
+    attributes:
+      label: Description
+      description: |
+        Please describe the issue!
+        > **NOTE**: All requested features must already be supported by the provider and Preview Services ([SFR1](https://azure.github.io/Azure-Verified-Modules/specs/shared/#id-sfr1---category-composition---preview-services)) are not supported.
+      placeholder: |
+        <!--
+        If this is a bug, please provide a minimum example to reproduce the bug.
+        If this is a feature request, please provide a detailed description of the feature.
+        -->
+    validations:
+      required: true
