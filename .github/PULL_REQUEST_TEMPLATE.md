@@ -7,8 +7,6 @@
 > List any dependencies that are required for this change.
 
 Fixes #123
-Fixes #456
-Closes #123
 Closes #456
 -->
 
