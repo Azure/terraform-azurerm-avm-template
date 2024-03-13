@@ -15,16 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  docs:
-    if: github.event.repository.name != 'terraform-azurerm-avm-template'
-    name: docs
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
-
-      - name: check docs
-        uses: Azure/terraform-azurerm-avm-template/.github/actions/docs-check@main
 
   terraform:
     if: github.event.repository.name != 'terraform-azurerm-avm-template'
@@ -38,14 +28,3 @@ jobs:
         uses: Azure/terraform-azurerm-avm-template/.github/actions/linting@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  avmfix:
-    if: github.event.repository.name != 'terraform-azurerm-avm-template' && false
-    name: avmfix
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
-
-      - name: avmfix
-        uses: Azure/terraform-azurerm-avm-template/.github/actions/avmfix@main

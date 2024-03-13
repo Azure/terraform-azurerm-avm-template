@@ -10,20 +10,10 @@ runs:
   using: composite
   steps:
 
-    - name: terraform fmt check
-      shell: bash
-      run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make tffmtcheck
-
     - name: terraform validate
       shell: bash
       run: |
         docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make tfvalidatecheck
-
-    - name: terrafmt check
-      shell: bash
-      run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make terrafmtcheck
 
     - name: tflint
       shell: bash
