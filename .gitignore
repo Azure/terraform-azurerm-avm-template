@@ -29,16 +29,13 @@ override.tf.json
 # Ignore Terraform lock file
 .terraform.lock.hcl
 
-# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
-# example: *tfplan*
-
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
 avmmakefile
 README-generated.md
-avm.tflint.merged.hcl
 avm.tflint.hcl
+avm.tflint.merged.hcl
 avm.tflint_example.hcl
 .tflint.hcl
 *tfplan*
@@ -46,3 +43,6 @@ avm.tflint_example.hcl
 
 # MacOS
 .DS_Store
+
+# AVM GitHub Labels Script
+Set-AvmGitHubLabels.ps1
