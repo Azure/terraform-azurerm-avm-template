@@ -37,8 +37,10 @@ override.tf.json
 terraform.rc
 avmmakefile
 README-generated.md
+avm.tflint.merged.hcl
 avm.tflint.hcl
 avm.tflint_example.hcl
+.tflint.hcl
 *tfplan*
 *.md.tmp
 
