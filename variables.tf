@@ -10,6 +10,14 @@ variable "name" {
   }
 }
 
+variable "telemetry_tags" {
+  type        = map(string)
+  default     = {}
+  description = <<DESCRIPTION
+These are tags applied to the telemetry resource group template deployment.
+DESCRIPTION
+}
+
 # This is required for most resource modules
 variable "resource_group_name" {
   type        = string
