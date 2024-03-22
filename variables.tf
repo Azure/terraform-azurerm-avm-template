@@ -168,6 +168,12 @@ A map of private endpoints to create on this resource. The map key is deliberate
 DESCRIPTION
 }
 
+variable "resource_group_template_deployment_tags" {
+  type        = map(string)
+  default     = null
+  description = "(Optional) A mapping of tags which should be assigned to the Resource Group Template Deployment."
+}
+
 variable "role_assignments" {
   type = map(object({
     role_definition_id_or_name             = string
