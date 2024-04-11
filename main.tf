@@ -1,13 +1,6 @@
-# TODO: insert resources here.
-data "azurerm_resource_group" "parent" {
-  count = var.location == null ? 1 : 0
-
-  name = var.resource_group_name
-}
-
 # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
 resource "azurerm_resource_group" "TODO" {
-  location = coalesce(var.location, local.resource_group_location)
+  location = var.location
   name     = var.name # calling code must supply the name
 }
 
