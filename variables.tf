@@ -21,13 +21,22 @@ variable "resource_group_name" {
 # tflint-ignore: terraform_unused_declarations
 variable "customer_managed_key" {
   type = object({
-    key_vault_resource_id              = optional(string)
-    key_name                           = optional(string)
-    key_version                        = optional(string, null)
-    user_assigned_identity_resource_id = optional(string, null)
+    key_vault_resource_id = string
+    key_name              = string
+    key_version           = optional(string, null)
+    user_assigned_identity = optional(object({
+      resource_id = string
+    }), null)
   })
-  default     = {}
-  description = "Customer managed keys that should be associated with the resource."
+  default     = null
+  description = <<DESCRIPTION
+A map describing customer-managed keys to associate with the resource. This includes the following properties:
+- `key_vault_resource_id` - The resource ID of the Key Vault where the key is stored.
+- `key_name` - The name of the key.
+- `key_version` - (Optional) The version of the key. If not specified, the latest version is used.
+- `user_assigned_identity` - (Optional) An object representing a user-assigned identity with the following properties:
+  - `resource_id` - The resource ID of the user-assigned identity.
+DESCRIPTION  
 }
 
 variable "diagnostic_settings" {
@@ -57,7 +66,7 @@ A map of diagnostic settings to create on the Key Vault. The map key is delibera
 - `event_hub_authorization_rule_resource_id` - (Optional) The resource ID of the event hub authorization rule to send logs and metrics to.
 - `event_hub_name` - (Optional) The name of the event hub. If none is specified, the default event hub will be selected.
 - `marketplace_partner_resource_id` - (Optional) The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic LogsLogs.
-DESCRIPTION
+DESCRIPTION  
   nullable    = false
 
   validation {
@@ -93,12 +102,16 @@ variable "location" {
 
 variable "lock" {
   type = object({
+    kind = string
     name = optional(string, null)
-    kind = optional(string, "None")
   })
-  default     = {}
-  description = "The lock level to apply. Default is `None`. Possible values are `None`, `CanNotDelete`, and `ReadOnly`."
-  nullable    = false
+  default     = null
+  description = <<DESCRIPTION
+Controls the Resource Lock configuration for this resource. The following properties can be specified:
+
+- `kind` - (Required) The type of lock. Possible values are `\"CanNotDelete\"` and `\"ReadOnly\"`.
+- `name` - (Optional) The name of the lock. If not specified, a name will be generated based on the `kind` value. Changing this forces the creation of a new resource.
+DESCRIPTION
 
   validation {
     condition     = contains(["CanNotDelete", "ReadOnly", "None"], var.lock.kind)
@@ -113,7 +126,13 @@ variable "managed_identities" {
     user_assigned_resource_ids = optional(set(string), [])
   })
   default     = {}
-  description = "Managed identities to be created for the resource."
+  description = <<DESCRIPTION
+Controls the Managed Identity configuration on this resource. The following properties can be specified:
+
+- `system_assigned` - (Optional) Specifies if the System Assigned Managed Identity should be enabled.
+- `user_assigned_resource_ids` - (Optional) Specifies a list of User Assigned Managed Identity resource IDs to be assigned to this resource.
+DESCRIPTION
+  nullable    = false
 }
 
 variable "private_endpoints" {
@@ -129,10 +148,10 @@ variable "private_endpoints" {
       delegated_managed_identity_resource_id = optional(string, null)
     })), {})
     lock = optional(object({
+      kind = string
       name = optional(string, null)
-      kind = optional(string, "None")
-    }), {})
-    tags                                    = optional(map(any), null)
+    }), null)
+    tags                                    = optional(map(string), null)
     subnet_resource_id                      = string
     private_dns_zone_group_name             = optional(string, "default")
     private_dns_zone_resource_ids           = optional(set(string), [])
@@ -166,6 +185,7 @@ A map of private endpoints to create on this resource. The map key is deliberate
   - `name` - The name of the IP configuration.
   - `private_ip_address` - The private IP address of the IP configuration.
 DESCRIPTION
+  nullable    = false
 }
 
 variable "role_assignments" {
@@ -191,11 +211,13 @@ A map of role assignments to create on this resource. The map key is deliberatel
 
 > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
 DESCRIPTION
+  nullable    = false
 }
+
 
 # tflint-ignore: terraform_unused_declarations
 variable "tags" {
-  type        = map(any)
-  default     = {}
-  description = "The map of tags to be applied to the resource"
+  type        = map(string)
+  default     = null
+  description = "(Optional) Tags of the resource."
 }
