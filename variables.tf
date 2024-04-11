@@ -114,7 +114,7 @@ Controls the Resource Lock configuration for this resource. The following proper
 DESCRIPTION
 
   validation {
-    condition     = contains(["CanNotDelete", "ReadOnly", "None"], var.lock.kind)
+    condition     = var.lock != null ? contains(["CanNotDelete", "ReadOnly"], var.lock.kind) : true
     error_message = "The lock level must be one of: 'None', 'CanNotDelete', or 'ReadOnly'."
   }
 }
@@ -186,6 +186,17 @@ A map of private endpoints to create on this resource. The map key is deliberate
   - `private_ip_address` - The private IP address of the IP configuration.
 DESCRIPTION
   nullable    = false
+}
+
+# This variable is used to determine if the private_dns_zone_group block should be included,
+# or if it is to be managed externally, e.g. using Azure Policy.
+# https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault/issues/32
+# Alternatively you can use AzAPI, which does not have this issue.
+variable "private_endpoints_manage_dns_zone_group" {
+  type        = bool
+  default     = true
+  nullable    = false
+  description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
 }
 
 variable "role_assignments" {

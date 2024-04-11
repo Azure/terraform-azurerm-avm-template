@@ -2,6 +2,7 @@
 resource "azurerm_resource_group" "TODO" {
   location = var.location
   name     = var.name # calling code must supply the name
+  tags     = var.tags
 }
 
 # required AVM resources interfaces

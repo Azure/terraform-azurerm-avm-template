@@ -21,8 +21,8 @@ locals {
     } : {}
   }
 
-  # Private endpoint application security group associations
-  # Remove if this resource does not support private endpoints
+  # Private endpoint application security group associations.
+  # We merge the nested maps from private endpoints and application security group associations into a single map.
   private_endpoint_application_security_group_associations = { for assoc in flatten([
     for pe_k, pe_v in var.private_endpoints : [
       for asg_k, asg_v in pe_v.application_security_group_associations : {
@@ -33,7 +33,6 @@ locals {
     ]
   ]) : "${assoc.pe_key}-${assoc.asg_key}" => assoc }
 
-  resource_group_location            = try(data.azurerm_resource_group.parent[0].location, null)
   role_definition_resource_substring = "/providers/Microsoft.Authorization/roleDefinitions"
 
 }
