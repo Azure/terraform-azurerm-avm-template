@@ -18,7 +18,7 @@ jobs:
     outputs:
       examples: ${{ steps.getexamples.outputs.examples }}
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b #v4.1.4
       - name: get examples
         id: getexamples
         uses: Azure/terraform-azurerm-avm-template/.github/actions/e2e-getexamples@main
@@ -38,13 +38,24 @@ jobs:
         example: ${{ fromJson(needs.getexamples.outputs.examples) }}
       fail-fast: false
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b #v4.1.4
 
       - name: Test example
         shell: bash
         run: |
           set -e
-          az login --identity --username $MSI_ID > /dev/null
+           MAX_RETRIES=10
+          RETRY_COUNT=0
+          until [ $RETRY_COUNT -ge $MAX_RETRIES ]
+          do
+            az login --identity --username $MSI_ID > /dev/null && break
+            RETRY_COUNT=$[$RETRY_COUNT+1]
+            sleep 10
+          done
+          if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+            echo "Failed to login after $MAX_RETRIES attempts."
+            exit 1
+          fi
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           export ARM_CLIENT_ID=$(az identity list | jq -r --arg MSI_ID "$MSI_ID" '.[] | select(.principalId == $MSI_ID) | .clientId')
