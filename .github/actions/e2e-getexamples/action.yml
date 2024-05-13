@@ -15,20 +15,15 @@ runs:
     - name: get examples
       id: getexamples
       run: |
-        # Get latest release from GitHub API and get download URL for the Linux x64 binary
-        URL=$(curl -sL -H "Authorization: Bearer ${{ inputs.github-token }}" https://api.github.com/repos/matt-FFFFFF/jsonls/releases/latest \
-          | jq -r '.assets[] | select( .name | test("linux_amd64")) | .browser_download_url')
-
-        # Download the binary and extract
-        curl -sL "$URL" | tar -xvz jsonls
-
-        # Ensure exec bit set
-        sudo chmod a+x jsonls
-
-        # Move binary to path
-        sudo mv jsonls /usr/local/bin/jsonls
-
-        # Get the examples
-        echo examples="$(jsonls -d)" >> "$GITHUB_OUTPUT"
+        # ls -d */                        = list directories
+        # cut -d/ -f1                     = strip trailing slash from ls output
+        # jq -R -s -c 'split("\n")[:-1]') = creates JSON array:
+        #                                    -R treats the input as string instead of JSON
+        #                                    -s joins all lines into an array
+        #                                    -c creates a compact output
+        #                                    [:-1] removes the last empty string in the output array
+        DIRS="$(ls -d */ | cut -d/ -f1 | jq -R -s -c 'split("\n")[:-1]')"
+        # Set output
+        echo examples="$DIRS" >> "$GITHUB_OUTPUT"
       working-directory: examples
       shell: bash
