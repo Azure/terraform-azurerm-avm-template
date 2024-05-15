@@ -18,4 +18,8 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-$CONTAINER_RUNTIME run --pull always --user "$(id -u):$(id -g)" --rm -v /etc/passwd:/etc/passwd -v /etc/group:/etc/group -v "$(pwd)":/src -w /src -e GITHUB_REPOSITORY -e GITHUB_REPOSITORY_OWNER mcr.microsoft.com/azterraform make "$1"
+if [ -z "$AVM_IN_CONTAINER" ]; then
+  $CONTAINER_RUNTIME run --pull always --user "$(id -u):$(id -g)" --rm -v /etc/passwd:/etc/passwd -v /etc/group:/etc/group -v "$(pwd)":/src -w /src -e GITHUB_REPOSITORY -e GITHUB_REPOSITORY_OWNER mcr.microsoft.com/azterraform make "$1"
+else
+  make "$1"
+fi
