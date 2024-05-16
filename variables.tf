@@ -1,3 +1,9 @@
+variable "location" {
+  type        = string
+  description = "Azure region where the resource should be deployed."
+  nullable    = false
+}
+
 variable "name" {
   type        = string
   description = "The name of the this resource."
@@ -92,12 +98,6 @@ This variable controls whether or not telemetry is enabled for the module.
 For more information see <https://aka.ms/avm/telemetryinfo>.
 If it is set to false, then no telemetry will be collected.
 DESCRIPTION
-}
-
-variable "location" {
-  type        = string
-  nullable    = false
-  description = "Azure region where the resource should be deployed."
 }
 
 variable "lock" {
@@ -195,8 +195,8 @@ DESCRIPTION
 variable "private_endpoints_manage_dns_zone_group" {
   type        = bool
   default     = true
-  nullable    = false
   description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
+  nullable    = false
 }
 
 variable "role_assignments" {
@@ -224,7 +224,6 @@ A map of role assignments to create on this resource. The map key is deliberatel
 DESCRIPTION
   nullable    = false
 }
-
 
 # tflint-ignore: terraform_unused_declarations
 variable "tags" {
