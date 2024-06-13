@@ -18,6 +18,7 @@ locals {
     64
   )
   # This is an empty ARM deployment template.
+  # tflint-ignore: terraform_heredoc_usage
   telem_arm_template_content = jsonencode(
     {
       "$schema"        = "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
