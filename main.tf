@@ -1,23 +1,18 @@
-# TODO: insert resources here.
-data "azurerm_resource_group" "parent" {
-  count = var.location == null ? 1 : 0
-
-  name = var.resource_group_name
-}
-
 # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
 resource "azurerm_resource_group" "TODO" {
-  location = coalesce(var.location, local.resource_group_location)
+  location = var.location
   name     = var.name # calling code must supply the name
+  tags     = var.tags
 }
 
 # required AVM resources interfaces
 resource "azurerm_management_lock" "this" {
-  count = var.lock.kind != "None" ? 1 : 0
+  count = var.lock != null ? 1 : 0
 
   lock_level = var.lock.kind
-  name       = coalesce(var.lock.name, "lock-${var.name}")
-  scope      = azurerm_resource_group.TODO.id # TODO: Replace this dummy resource azurerm_resource_group.TODO with your module resource
+  name       = coalesce(var.lock.name, "lock-${var.lock.kind}")
+  scope      = azurerm_MY_RESOURCE.this.id # TODO: Replace with your azurerm resource name
+  notes      = var.lock.kind == "CanNotDelete" ? "Cannot delete the resource or its child resources." : "Cannot delete or modify the resource or its child resources."
 }
 
 resource "azurerm_role_assignment" "this" {
