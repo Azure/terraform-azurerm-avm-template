@@ -13,7 +13,7 @@ runs:
     - name: detect changes
       shell: bash
       run: |
-        if [ -z $(git status -s) ]; then
+        if [ -z "$(git status -s)" ]; then
           echo "No changes detected"
           exit 0
         else
