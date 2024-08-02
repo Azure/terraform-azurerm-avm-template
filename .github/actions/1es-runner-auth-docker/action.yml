@@ -12,7 +12,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: semver regex
+    - name: init and run docker command
       shell: bash
       run: |
         set -e
