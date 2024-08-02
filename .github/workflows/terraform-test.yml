@@ -1,0 +1,31 @@
+---
+name: terraform test
+
+on:
+  pull_request:
+    types: ['opened', 'reopened', 'synchronize']
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraformtest:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template'
+    runs-on: [ self-hosted, 1ES.Pool=terraform-azurerm-avm-template ]
+    environment: test
+    env:
+      TF_IN_AUTOMATION: 1
+      TF_VAR_enable_telemetry: false
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 #v4.1.7
+
+      - name: Terraform test
+        uses: Azure/terraform-azurerm-avm-template/.github/actions/1es-runner-auth-docker@main
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        with:
+          makefile-target: terraform-test
