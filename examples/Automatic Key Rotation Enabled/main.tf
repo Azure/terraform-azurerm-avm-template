@@ -78,6 +78,7 @@ module "test" {
   location = azurerm_resource_group.this.location
   key_vault_key_id = azurerm_key_vault_key.example.id
   key_vault_resource_id = module.avm-res-keyvault-vault.key_vault_id
+  auto_key_rotation_enabled = true
 
 }
 
