@@ -18,7 +18,7 @@ runs:
     - name: terraform validate
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make tfvalidatecheck
+        docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID mcr.microsoft.com/azterraform make tfvalidatecheck
 
     - name: terrafmt check
       shell: bash
@@ -28,7 +28,7 @@ runs:
     - name: tflint
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make tflint
+        docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID mcr.microsoft.com/azterraform make tflint
 
     - name: tfsec
       shell: bash
