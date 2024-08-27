@@ -15,15 +15,27 @@ runs:
     - name: get examples
       id: getexamples
       run: |
-        # ls -d */                        = list directories
-        # cut -d/ -f1                     = strip trailing slash from ls output
-        # jq -R -s -c 'split("\n")[:-1]') = creates JSON array:
-        #                                    -R treats the input as string instead of JSON
-        #                                    -s joins all lines into an array
-        #                                    -c creates a compact output
-        #                                    [:-1] removes the last empty string in the output array
-        DIRS="$(ls -d */ | cut -d/ -f1 | jq -R -s -c 'split("\n")[:-1]')"
-        # Set output
+        # Loop through all directories (*/ means all directories ending with a /)
+        DIRS=$(for dir in */; do
+          # Check if the directory does NOT contain a .e2eignore file
+          if [ ! -f "$dir/.e2eignore" ]; then
+            # If the directory does not have a .e2eignore file, include it in the output
+            echo "$dir"
+          fi
+        done |
+        # Remove the trailing slash from each directory name
+        # -d/ specifies the delimiter as "/"
+        # -f1 selects the first field before the delimiter, which is the directory name
+        cut -d/ -f1 |
+        # Convert the list of directory names to a JSON array
+        # -R treats the input as raw strings instead of JSON
+        # -s slurps all lines into a single string
+        # -c generates a compact JSON output
+        # 'split("\n")[:-1]' splits the input into an array based on newline characters
+        # and [:-1] removes the last empty string caused by a trailing newline
+        jq -R -s -c 'split("\n")[:-1]')
+
+        # Set output for GitHub Actions using the $GITHUB_OUTPUT variable
         echo examples="$DIRS" >> "$GITHUB_OUTPUT"
       working-directory: examples
       shell: bash
