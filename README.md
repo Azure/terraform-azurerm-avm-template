@@ -12,7 +12,7 @@ Things to do:
 > [!IMPORTANT]
 > Modules **MUST NOT** be published at version `1.0.0` or higher at this time. All module **MUST** be published as versions (e.g., `0.1.0`, `0.1.1`, `0.2.0`, etc.).
 > We plan to allow `v1.0.0` in the coming months.
-> This delay is to ensure there will be no futher changes to the specifications that woudl result in breaking changes.
+> This delay is to ensure there will be no futher changes to the specifications that would result in breaking changes.
 >
 > AVM modules are suitable for use in production (unless specified otherwise on the module's repo).
 
