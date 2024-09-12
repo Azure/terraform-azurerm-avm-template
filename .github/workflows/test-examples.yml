@@ -1,5 +1,5 @@
 ---
-name: e2e test with OIDC authentication
+name: test examples
 on:
   pull_request:
     types: ['opened', 'reopened', 'synchronize']
@@ -9,8 +9,8 @@ on:
 jobs:
   run-e2e-tests:
     if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
-    uses: Azure/terraform-azurerm-avm-template/.github/workflows/e2e-oidc-template.yml@main
-    name: 'Run End to End Tests'
+    uses: Azure/terraform-azurerm-avm-template/.github/workflows/test-examples-template.yml@main
+    name: end to end
     permissions:
       id-token: write
       contents: read
