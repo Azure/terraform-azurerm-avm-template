@@ -5,13 +5,6 @@ on:
   workflow_call:
 
 jobs:
-  showevent:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Show event
-        run: | 
-          echo "${{ toJson(github.event) }}"
-
   getexamples:
     if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
