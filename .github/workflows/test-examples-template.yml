@@ -71,6 +71,7 @@ jobs:
           if [ -z "$tenantId" ]; then
             tenantId=${{ secrets.ARM_TENANT_ID }}
           fi
+          echo "tenantId: $tenantId"
 
           subscriptionId=${{ secrets.ARM_SUBSCRIPTION_ID_OVERRIDE }}
           if [ -z "$subscriptionId" ]; then
