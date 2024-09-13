@@ -7,6 +7,15 @@
     workflow_dispatch:
   
   jobs:
+    warning:
+      if: github.event.pull_request.head.repo.fork == true
+      runs-on: ubuntu-latest
+      steps:
+        - name: Warning - Cannot run from fork
+          shell: bash
+          run: |
+            echo "WARNING: This workflow cannot be run from a Fork. Please follow the release branch process if you need to run end to end tests."
+            
     run-e2e-tests:
       if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
       uses: Azure/terraform-azurerm-avm-template/.github/workflows/test-examples-template.yml@main
