@@ -1,0 +1,100 @@
+---
+name: test example modules
+
+on:
+  workflow_call:
+
+jobs:
+  getexamples:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
+    runs-on: ubuntu-latest
+    outputs:
+      examples: ${{ steps.getexamples.outputs.examples }}
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 #v4.1.7
+      - name: get examples
+        id: getexamples
+        uses: Azure/terraform-azurerm-avm-template/.github/actions/e2e-getexamples@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  testexamples:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
+    name: ${{ matrix.example }}
+    runs-on: ubuntu-latest
+    needs: getexamples
+    environment: test
+    env:
+      TF_IN_AUTOMATION: 1
+      TF_VAR_enable_telemetry: false
+    strategy:
+      matrix:
+        example: ${{ fromJson(needs.getexamples.outputs.examples) }}
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 #v4.1.7
+
+      - name: Test example
+        shell: bash
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: |
+          set -e
+
+          declare -A secrets
+          eval "$(echo $SECRETS_CONTEXT | jq -r 'to_entries[] | @sh "secrets[\(.key|tostring)]=\(.value|tostring)"')"
+
+          declare -A variables
+          eval "$(echo $VARS_CONTEXT | jq -r 'to_entries[] | @sh "variables[\(.key|tostring)]=\(.value|tostring)"')"
+
+          for key in "${!secrets[@]}"; do
+            if [[ $key = \TF_VAR_* ]]; then
+              lowerKey=$(echo "$key" | tr '[:upper:]' '[:lower:]')
+              finalKey=${lowerKey/tf_var_/TF_VAR_}
+              export "$finalKey"="${secrets[$key]}"
+            fi
+          done
+
+          for key in "${!variables[@]}"; do
+            if [[ $key = \TF_VAR_* ]]; then
+              lowerKey=$(echo "$key" | tr '[:upper:]' '[:lower:]')
+              finalKey=${lowerKey/tf_var_/TF_VAR_}
+              export "$finalKey"="${variables[$key]}"
+            fi
+          done
+
+          echo -e "Custom environment variables:\n$(env | grep TF_VAR_ | grep -v ' "TF_VAR_')"
+        
+          # Set up the Azure Provider Environment Variables
+          tenantId=${{ secrets.ARM_TENANT_ID_OVERRIDE }}
+          if [ -z "$tenantId" ]; then
+            tenantId=${{ secrets.ARM_TENANT_ID }}
+          fi
+          echo "tenantId: $tenantId"
+
+          subscriptionId=${{ secrets.ARM_SUBSCRIPTION_ID_OVERRIDE }}
+          if [ -z "$subscriptionId" ]; then
+            subscriptionId=${{ secrets.ARM_SUBSCRIPTION_ID }}
+          fi
+
+          clientId=${{ secrets.ARM_CLIENT_ID_OVERRIDE }}
+          if [ -z "$clientId" ]; then
+            clientId=${{ secrets.ARM_CLIENT_ID }}
+          fi
+
+          export ARM_TENANT_ID=$tenantId
+          export ARM_SUBSCRIPTION_ID=$subscriptionId        
+          export ARM_CLIENT_ID=$clientId
+          export ARM_OIDC_REQUEST_TOKEN=$ACTIONS_ID_TOKEN_REQUEST_TOKEN
+          export ARM_OIDC_REQUEST_URL=$ACTIONS_ID_TOKEN_REQUEST_URL
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:latest make test-example
+
+  # This job is only run when all the previous jobs are successful.
+  # We can use it for PR validation to ensure all examples have completed.
+  testexamplescomplete:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
+    runs-on: ubuntu-latest
+    needs: testexamples
+    steps:
+      - run: echo "All tests passed"
