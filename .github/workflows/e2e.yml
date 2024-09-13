@@ -22,6 +22,7 @@
       if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
       uses: Azure/terraform-azurerm-avm-template/.github/workflows/test-examples-template.yml@main
       name: end to end
+      secrets: inherit
       permissions:
         id-token: write
         contents: read
