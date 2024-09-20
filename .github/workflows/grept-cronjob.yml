@@ -1,0 +1,135 @@
+---
+name: grept
+on:
+  schedule:
+    - cron: '43 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: write
+
+jobs:
+  governance:
+    name: governance
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_USER: matt-FFFFFF
+      GREPT_CONFIG: "git::https://github.com/Azure/Azure-Verified-Modules-Grept.git//terraform"
+    outputs:
+      result: ${{ steps.set-output.outputs.result }}
+    steps:
+      - name: set env result=success
+        run: |
+          echo 'result=success' >> "$GITHUB_ENV"
+
+      - name: checkout repository
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 #v4.1.7
+
+      - name: grept apply and auto remediate
+        run: |
+          echo "==> Checking code repository with grept against ${{ env.GREPT_CONFIG }}..."
+          docker run --pull always --rm -v "$(pwd)":/src -w /src -e GITHUB_TOKEN -e GITHUB_REPOSITORY -e GITHUB_REPOSITORY_OWNER mcr.microsoft.com/azterraform:latest /usr/local/go/bin/grept apply --var workflows_toggle=false --auto "${{ env.GREPT_CONFIG }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: avm pre-commit
+        run: |
+          ./avm pre-commit
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: detect changes
+        id: changes
+        run: |
+          if [[ -z $(git status -s) ]]; then
+            echo "No changes detected"
+            echo 'detected=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "Changes detected"
+          echo 'detected=true' >> "$GITHUB_OUTPUT"
+
+      - name: commit changes to branch and push to origin
+        if: steps.changes.outputs.detected == 'true'
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          BRANCH="grept-apply-$(date +%s)"
+          echo "branch=$BRANCH" >> "$GITHUB_ENV"
+          git checkout -b "$BRANCH"
+          git add .
+          git commit -m "fix: grept apply"
+          git push --set-upstream origin "$BRANCH"
+
+      - name: create PR body
+        if: steps.changes.outputs.detected == 'true'
+        id: prbody
+        run: |
+          tee prbody.md <<EOF
+          ## Repository governance update
+
+          This PR was automatically created by the AVM Team hive-mind using the [grept](https://github.com/Azure/grept) governance tool.
+
+          We have detected that some files need updating to meet the AVM governance standards.
+          Please review and merge with alacrity.
+
+          Grept config source: \`${{ env.GREPT_CONFIG }}\`
+
+          Thanks! The AVM team :heart:
+          EOF
+
+      - name: show body
+        if: steps.changes.outputs.detected == 'true'
+        run: |
+          echo "Displaying PR body:"
+          cat prbody.md
+
+      - name: create pull request
+        if: steps.changes.outputs.detected == 'true'
+        id: pr
+        run: |
+          PR_URL=$(gh pr create --title "chore: repository governance" --body-file prbody.md)
+          echo pull-request-number=$(gh pr view $PR_URL --json number | jq -r '.number') >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: close and comment out of date prs
+        if: steps.changes.outputs.detected == 'true'
+        run: |
+          PULL_REQUESTS=$(gh pr list --search "chore: repository governance" --json number,headRefName)
+          echo "$PULL_REQUESTS" | jq -r '.[] | select(.number != ${{ steps.pr.outputs.pull-request-number }}) | .number' | xargs -I {} gh pr close {} --delete-branch --comment "Supersceeded by #${{ steps.pr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: set env result=failure
+        if: ${{ failure() }}
+        run: |
+          echo 'result=failed' >> "$GITHUB_ENV"
+          if [ ! -z "${{ env.branch }}" ]; then
+            git push origin --delete "${{ env.branch }}"
+          fi
+
+
+      - name: set output
+        if: ${{ always() }}
+        id: set-output
+        run: |
+          echo "result=${{ env.result }}" >> "$GITHUB_OUTPUT"
+
+  report:
+    name: report
+    runs-on: ubuntu-latest
+    needs: governance
+    if: ${{ failure() }}
+    steps:
+      - name: raise issue
+        run: |
+          ## BLOCKED on matrix outputs: https://github.com/actions/runner/pull/2477
+          ## gh issue create --repo ${{ github.repository }} --title "Repository governance failure" --body "The following repositories failed governance checks:\n\n```json\n${{ toJSON(join(needs.governance.outputs)) }}\n```\n"
+          gh issue create --repo ${{ github.repository }} --assignee matt-FFFFFF --title "Repository governance failure" --body "This repository failed governance checks: <${{ github.server_url}}/${{ github.repository }}/actions/runs/${{ github.run_id}}>"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
