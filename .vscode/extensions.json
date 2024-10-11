@@ -1,6 +1,7 @@
 {
   "recommendations": [
-    "hashicorp.terraform",
-    "EditorConfig.EditorConfig"
+    "azapi-vscode.azapi",
+    "EditorConfig.EditorConfig",
+    "hashicorp.terraform"
   ]
 }
