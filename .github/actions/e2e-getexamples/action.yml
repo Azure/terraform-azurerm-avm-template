@@ -26,12 +26,12 @@ runs:
             $files = Get-ChildItem -Path $folder.FullName -File -Filter "*.tf"
             if($files.Count -ne 0) {
                 $examples += $folder.Name
-            }
 
-            # Check if the folder contains a .e2eignore file
-            $ignore = Get-ChildItem -Path $folder.FullName -File -Filter ".e2eignore"
-            if($ignore.Count -eq 0) {
-                $e2eTests += $folder.Name
+                # Check if the folder contains a .e2eignore file
+                $ignore = Get-ChildItem -Path $folder.FullName -File -Filter ".e2eignore"
+                if($ignore.Count -eq 0) {
+                    $e2eTests += $folder.Name
+                }
             }
         }
 
