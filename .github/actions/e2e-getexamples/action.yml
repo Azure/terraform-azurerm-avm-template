@@ -39,7 +39,7 @@ runs:
           throw "At least one example must be present for Azure Verified Modules"
         }
 
-        $e2eTestsJson = ConvertTo-Json $e2eTests
+        $e2eTestsJson = ConvertTo-Json $e2eTests -Compress
 
         Write-Output "examples=$e2eTestsJson" >> $env:GITHUB_OUTPUT
 
