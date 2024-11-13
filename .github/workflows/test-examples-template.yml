@@ -6,7 +6,7 @@ on:
 
 jobs:
   getexamples:
-    if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
+    if: github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     outputs:
       examples: ${{ steps.getexamples.outputs.examples }}
