@@ -23,12 +23,12 @@ runs:
 
         foreach ($folder in $folders) {
             # Check if the folder contains at least one .tf file
-            $files = Get-ChildItem -Path $folder.FullName -File -Filter "*.tf"
+            $files = Get-ChildItem -Path $folder.FullName -File -Filter "*.tf" -Force
             if($files.Count -ne 0) {
                 $examples += $folder.Name
 
                 # Check if the folder contains a .e2eignore file
-                $ignore = Get-ChildItem -Path $folder.FullName -File -Filter ".e2eignore"
+                $ignore = Get-ChildItem -Path $folder.FullName -File -Filter ".e2eignore" -Force
                 if($ignore.Count -eq 0) {
                     $e2eTests += $folder.Name
                 }
