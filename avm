@@ -1,22 +1,43 @@
 #!/usr/bin/env sh
 
-usage () {
-  echo "Usage: avm <make target>"
+usage() {
+  echo "Usage: ${0} <make target> <custom docker run option> <custom docker image>"
+  echo "<make target>: Running all pre-commit checks, could be 'pre-commit' or 'pr-check'."
+  echo "<custom docker run option>: Docker option when running behind a proxy with SSL inspection for example."
+  echo "<custom docker image>: Docker source image if you only have access to mirrored images."
+  echo ""
+  echo "Sample 1: Run the pre-commit check 'pre-commit' that runs depsensure fmt fumpt autofix docs\n${0} pre-commit"
+  echo ""
+  echo "Sample 2: Run the pre-commit check 'pr-check' that fmtcheck tfvalidatecheck lint unit-test\n${0} pr-check"
+  echo ""
+  echo "Sample 3: Run the pre-commit check 'pr-commit' behind a proxy with SSL inspection and a mirrored Docker image\n${0} pr-commit \ \n'--add-host proxylocal:192.168.xx.x -e HTTPS_PROXY -e HTTP_PROXY -e https_proxy -e http_proxy -e no_proxy -v /etc/ssl/certs/ca-certificates.crt:/etc/pki/tls/certs/ca-bundle.trust.crt' \ \n'registry-docker.myinternaldomain.com/vendors/azterraform:latest'"
 }
 
 CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-docker}
 
 if [ ! "$(command -v "$CONTAINER_RUNTIME")" ]; then
-    echo "Error: $CONTAINER_RUNTIME is not installed. Please install $CONTAINER_RUNTIME first."
-    exit 1
+  echo "Error: $CONTAINER_RUNTIME is not installed. Please install $CONTAINER_RUNTIME first."
+  exit 1
 fi
 
 if [ -z "$1" ]; then
-    echo "Error: Please provide a make target. See https://github.com/Azure/tfmod-scaffold/blob/main/avmmakefile for available targets."
-    echo
-    usage
-    exit 1
+  echo "Error: Please provide a make target. See https://github.com/Azure/tfmod-scaffold/blob/main/avmmakefile for available targets."
+  echo
+  usage
+  exit 1
 fi
+
+if [ ! -z "$2" ]; then
+  option="$2"
+  echo "Info: Using the docker run option '$option'"
+fi
+
+if [ -z "$3" ]; then
+  image="mcr.microsoft.com/azterraform"
+else
+  image="$3"
+fi
+echo "Info: Using $CONTAINER_RUNTIME to run the container with image $image"
 
 # Mount .azure directory if it exists
 AZURE_VOLUME=""
@@ -27,7 +48,7 @@ fi
 # Check if we are running in a container
 # If we are then just run make directly
 if [ -z "$AVM_IN_CONTAINER" ]; then
-  $CONTAINER_RUNTIME run --pull always --user "$(id -u):$(id -g)" --rm $AZURE_VOLUME -v "$(pwd)":/src -w /src -e GITHUB_REPOSITORY -e ARM_SUBSCRIPTION_ID -e GITHUB_REPOSITORY_OWNER mcr.microsoft.com/azterraform make "$1"
+  $CONTAINER_RUNTIME run $option --pull always --user "$(id -u):$(id -g)" --rm $AZURE_VOLUME -v "$(pwd)":/src -w /src -e GITHUB_REPOSITORY -e ARM_SUBSCRIPTION_ID -e GITHUB_REPOSITORY_OWNER $image make "$1"
 else
   make "$1"
 fi
