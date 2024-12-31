@@ -76,16 +76,13 @@ jobs:
             clientId=${{ secrets.ARM_CLIENT_ID }}
           fi
 
-          export ARM_TENANT_ID=$tenantId
-          export ARM_SUBSCRIPTION_ID=$subscriptionId        
-          export ARM_CLIENT_ID=$clientId
           export ARM_OIDC_REQUEST_TOKEN=$ACTIONS_ID_TOKEN_REQUEST_TOKEN
           export ARM_OIDC_REQUEST_URL=$ACTIONS_ID_TOKEN_REQUEST_URL
           
           if [ -f examples/setup.sh ]; then
             chmod +x examples/setup.sh
             cd examples
-            ./setup.sh
+            ARM_TENANT_ID=$tenantId ARM_SUBSCRIPTION_ID=$subscriptionId ARM_CLIENT_ID=$clientId ./setup.sh
           fi
         id: global-setup
         shell: bash
@@ -222,16 +219,13 @@ jobs:
             clientId=${{ secrets.ARM_CLIENT_ID }}
           fi
 
-          export ARM_TENANT_ID=$tenantId
-          export ARM_SUBSCRIPTION_ID=$subscriptionId        
-          export ARM_CLIENT_ID=$clientId
           export ARM_OIDC_REQUEST_TOKEN=$ACTIONS_ID_TOKEN_REQUEST_TOKEN
           export ARM_OIDC_REQUEST_URL=$ACTIONS_ID_TOKEN_REQUEST_URL
           
           if [ -f examples/teardown.sh ]; then
             chmod +x examples/teardown.sh
             cd examples
-            ./teardown.sh
+            ARM_TENANT_ID=$tenantId ARM_SUBSCRIPTION_ID=$subscriptionId ARM_CLIENT_ID=$clientId  ./teardown.sh
           fi
         id: global-teardown
         shell: bash
