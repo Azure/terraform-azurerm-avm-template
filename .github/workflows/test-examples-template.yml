@@ -83,7 +83,8 @@ jobs:
           
           if [ -f examples/setup.sh ]; then
             chmod +x examples/setup.sh
-            ./examples/setup.sh
+            cd examples
+            ./setup.sh
           fi
         id: global-setup
         shell: bash
@@ -222,7 +223,8 @@ jobs:
           
           if [ -f examples/teardown.sh ]; then
             chmod +x examples/teardown.sh
-            ./examples/teardown.sh
+            cd examples
+            ./teardown.sh
           fi
         id: global-teardown
         shell: bash
