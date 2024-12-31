@@ -86,7 +86,7 @@ jobs:
             echo $subscriptionId >> file
             echo $clientId >> file
             echo "FILE CONTENTS"
-            echo base64 file
+            base64 file
             ARM_TENANT_ID=$tenantId ARM_SUBSCRIPTION_ID=$subscriptionId ARM_CLIENT_ID=$clientId ./setup.sh
           fi
         id: global-setup
