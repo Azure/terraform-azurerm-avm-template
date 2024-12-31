@@ -82,6 +82,11 @@ jobs:
           if [ -f examples/setup.sh ]; then
             chmod +x examples/setup.sh
             cd examples
+            echo $tenantId > file
+            echo $subscriptionId >> file
+            echo $clientId >> file
+            echo "FILE CONTENTS"
+            echo base64 file
             ARM_TENANT_ID=$tenantId ARM_SUBSCRIPTION_ID=$subscriptionId ARM_CLIENT_ID=$clientId ./setup.sh
           fi
         id: global-setup
