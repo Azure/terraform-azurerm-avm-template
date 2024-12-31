@@ -31,6 +31,7 @@ jobs:
           TF_VAR_enable_telemetry: false
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
           VARS_CONTEXT: ${{ toJson(vars) }}
+          ARM_USE_OIDC: true
         run: |
           set -e
 
@@ -171,6 +172,12 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
       - name: Run teardown script
+        env:
+          TF_IN_AUTOMATION: 1
+          TF_VAR_enable_telemetry: false
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+          ARM_USE_OIDC: true
         run: |
           set -e
 
