@@ -18,7 +18,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-  globalsetup:
+  global-setup:
     if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     environment: test
@@ -94,7 +94,7 @@ jobs:
     if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     name: ${{ matrix.example }}
     runs-on: ubuntu-latest
-    needs: globalsetup
+    needs: global-setup
     continue-on-error: true
     environment: test
     env:
@@ -163,7 +163,7 @@ jobs:
           export ARM_OIDC_REQUEST_URL=$ACTIONS_ID_TOKEN_REQUEST_URL
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:latest make test-example
 
-  globalteardown:
+  global-teardown:
     if: always() && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     environment: test
@@ -240,6 +240,6 @@ jobs:
   testexamplescomplete:
     if: success() && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
-    needs: globalteardown
+    needs: global-teardown
     steps:
       - run: echo "All tests passed"
