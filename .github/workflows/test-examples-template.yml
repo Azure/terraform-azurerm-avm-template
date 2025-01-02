@@ -32,6 +32,7 @@ jobs:
             echo "setup_exists=true" >> $GITHUB_ENV
           else
             echo "setup_exists=false" >> $GITHUB_ENV
+          fi
         shell: bash
 
   globalsetup:
@@ -122,6 +123,7 @@ jobs:
             echo "teardown_exists=true" >> $GITHUB_ENV
           else
             echo "teardown_exists=false" >> $GITHUB_ENV
+          fi
         shell: bash
 
   globalteardown:
