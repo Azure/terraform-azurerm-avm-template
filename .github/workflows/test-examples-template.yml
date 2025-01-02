@@ -18,11 +18,27 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+  checksetup:
+    runs-on: ubuntu-latest
+    needs: getexamples
+    outputs:
+      setup_exists: ${{ steps.check-setup.outputs.setup_exists }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
+      - name: Check if setup.sh exists
+        id: check-setup
+        run: |
+          if [ -f examples/setup.sh ]; then
+            echo "setup_exists=true" >> $GITHUB_ENV
+          else
+            echo "setup_exists=false" >> $GITHUB_ENV
+        shell: bash
+
   globalsetup:
-    if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
+    if: needs.checksetup.outputs.setup_exists == 'true' && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     environment: test
-    needs: getexamples
+    needs: checksetup
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
       - name: Run global setup script
@@ -92,11 +108,27 @@ jobs:
           
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:latest make test-example
 
+  checkteardown:
+    runs-on: ubuntu-latest
+    needs: testexamples
+    outputs:
+      teardown_exists: ${{ steps.check-teardown.outputs.teardown_exists }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
+      - name: Check if teardown.sh exists
+        id: check-teardown
+        run: |
+          if [ -f examples/teardown.sh ]; then
+            echo "teardown_exists=true" >> $GITHUB_ENV
+          else
+            echo "teardown_exists=false" >> $GITHUB_ENV
+        shell: bash
+
   globalteardown:
-    if: always() && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
+    if: always() && needs.checkteardown.outputs.teardown_exists == 'true' && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     environment: test
-    needs: testexamples
+    needs: checkteardown
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
       - name: Run teardown script
