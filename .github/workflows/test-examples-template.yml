@@ -165,8 +165,8 @@ jobs:
   # We can use it for PR validation to ensure all examples have completed.
   testexamplescomplete:
 #    if: failure() != true && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
-    if: success() && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
+    if: success() && needs.testexamples.result == 'success' && (needs.globalteardown.result == 'success' || needs.globalteardown.result == 'skipped') && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
-    needs: [testexamples, checkteardown, globalteardown]
+    needs: [testexamples, checkteardown]
     steps:
       - run: echo "All tests passed"
