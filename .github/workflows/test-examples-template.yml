@@ -29,9 +29,9 @@ jobs:
         id: check-setup
         run: |
           if [ -f examples/setup.sh ]; then
-            echo "setup_exists=true" >> $GITHUB_ENV
+            echo "setup_exists=true" >> $GITHUB_OUTPUT
           else
-            echo "setup_exists=false" >> $GITHUB_ENV
+            echo "setup_exists=false" >> $GITHUB_OUTPUT
           fi
         shell: bash
 
@@ -120,9 +120,9 @@ jobs:
         id: check-teardown
         run: |
           if [ -f examples/teardown.sh ]; then
-            echo "teardown_exists=true" >> $GITHUB_ENV
+            echo "teardown_exists=true" >> $GITHUB_OUTPUT
           else
-            echo "teardown_exists=false" >> $GITHUB_ENV
+            echo "teardown_exists=false" >> $GITHUB_OUTPUT
           fi
         shell: bash
 
