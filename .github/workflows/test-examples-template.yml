@@ -164,15 +164,8 @@ jobs:
   # This job is only run when all the previous jobs are successful.
   # We can use it for PR validation to ensure all examples have completed.
   testexamplescomplete:
-#    if: failure() != true && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     needs: testexamples
     steps:
-      - run: |
-          if [ "${{ needs.testexamples.result }}" != "success" ]; then
-            echo "Some tests failed"
-            exit 1
-          else
-            echo "All tests passed"
-          fi
+      - run: echo "All tests passed"
