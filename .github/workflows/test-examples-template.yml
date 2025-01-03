@@ -58,7 +58,7 @@ jobs:
         run: |
           set -e
 
-          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/global-setup/avm_scripts"
+          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
           
@@ -102,7 +102,7 @@ jobs:
         run: |
           set -e
 
-          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/global-setup/avm_scripts"
+          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
           
@@ -149,7 +149,7 @@ jobs:
         run: |
           set -e
 
-          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/global-setup/avm_scripts"
+          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
           
