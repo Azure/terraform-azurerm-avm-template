@@ -58,7 +58,7 @@ jobs:
         run: |
           set -e
 
-          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
+          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/global-setup/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
           
@@ -102,7 +102,7 @@ jobs:
         run: |
           set -e
 
-          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
+          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/global-setup/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
           
@@ -149,7 +149,7 @@ jobs:
         run: |
           set -e
 
-          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
+          export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/global-setup/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
           
@@ -164,7 +164,7 @@ jobs:
   # This job is only run when all the previous jobs are successful.
   # We can use it for PR validation to ensure all examples have completed.
   testexamplescomplete:
-    if: github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
+    if: always() && !failure() && !cancelled() && github.event.repository.name != 'terraform-azurerm-avm-template' && github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     needs: testexamples
     steps:
