@@ -47,3 +47,6 @@ avm.tflint_module.merged.hcl
 *.md.tmp
 # MacOS
 .DS_Store
+
+# conftest policy
+examples/*/policy
