@@ -34,6 +34,7 @@ jobs:
 
   getexamples:
     if: github.event.pull_request.head.repo.fork == false
+    needs: conftest
     runs-on: ubuntu-latest
     outputs:
       examples: ${{ steps.getexamples.outputs.examples }}
