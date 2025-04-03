@@ -13,11 +13,19 @@ runs:
     - name: detect changes
       shell: bash
       run: |
-        git status -s
+        status_output=$(git status -s)
         if [ -z "$(git status -s)" ]; then
           echo "No changes detected"
           exit 0
         else
+          echo "Changes detected in the following files:"
+          echo "$status_output" | while read -r line; do
+              file=$(echo "$line" | awk '{print $2}')
+              echo "----------------------------------------"
+              echo "Changes in file: $file"
+              git diff "$file"
+          done
+
           echo "AVMfix changes detected, please run:"
           echo "> docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make pre-commit"
           echo "... or if you have the avm helper script installed:"
