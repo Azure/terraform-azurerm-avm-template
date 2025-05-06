@@ -1,6 +1,6 @@
 author: AVM
-name: Docs check
-description: Checks that documentation has been updated on PR
+name: Mapotf precommit check
+description: Checks that mapotf pre-commit transformations have been applied on PR
 runs:
   using: composite
   steps:
