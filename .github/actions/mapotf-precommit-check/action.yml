@@ -1,0 +1,10 @@
+author: AVM
+name: Docs check
+description: Checks that documentation has been updated on PR
+runs:
+  using: composite
+  steps:
+    - name: fmt check
+      shell: bash
+      run: |
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make mapotf-precommit-check

@@ -26,6 +26,17 @@ jobs:
       - name: check docs
         uses: Azure/terraform-azurerm-avm-template/.github/actions/docs-check@main
 
+  mapotf-precommit-check:
+    if: github.event.repository.name != 'terraform-azurerm-avm-template'
+    name: mapotf-precommit-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
+
+      - name: check mapotf-precommit-check
+        uses: Azure/terraform-azurerm-avm-template/.github/actions/mapotf-precommit-check@main
+
   terraform:
     if: github.event.repository.name != 'terraform-azurerm-avm-template'
     name: terraform
