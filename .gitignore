@@ -50,3 +50,6 @@ avm.tflint_module.merged.hcl
 
 # conftest policy
 examples/*/policy
+# intermediate pla files for conftest
+"**/tfplan.binary",
+"**/tfplan.json",
