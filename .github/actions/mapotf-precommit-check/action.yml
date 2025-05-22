@@ -1,0 +1,10 @@
+author: AVM
+name: Mapotf precommit check
+description: Checks that mapotf pre-commit transformations have been applied on PR
+runs:
+  using: composite
+  steps:
+    - name: fmt check
+      shell: bash
+      run: |
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make mapotf-precommit-check
