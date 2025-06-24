@@ -33,7 +33,7 @@ IF ERRORLEVEL 1 (
     exit /b
 )
 
-IF DEFINED AVM_IMAGE (SET "AVM_IMAGE=%AVM_IMAGE%") ELSE (SET "AVM_IMAGE=mcr.microsoft.com/azterraform")
+IF DEFINED AVM_IMAGE (SET "AVM_IMAGE=%AVM_IMAGE%") ELSE (SET "AVM_IMAGE=mcr.microsoft.com/azterraform:avm-latest")
 
 REM Check if a make target is provided
 IF "%~1"=="" (

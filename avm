@@ -33,7 +33,7 @@ if [ ! "$(command -v "$CONTAINER_RUNTIME")" ] && [ -z "$AVM_IN_CONTAINER" ]; the
     exit 1
 fi
 
-AVM_IMAGE=${AVM_IMAGE:-mcr.microsoft.com/azterraform}
+AVM_IMAGE=${AVM_IMAGE:-mcr.microsoft.com/azterraform:avm-latest}
 
 if [ -z "$1" ]; then
     echo "Error: Please provide a make target. See https://github.com/Azure/tfmod-scaffold/blob/main/avmmakefile for available targets."

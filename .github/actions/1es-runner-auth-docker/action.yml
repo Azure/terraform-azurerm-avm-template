@@ -56,4 +56,4 @@ runs:
         export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
         export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
         export ARM_CLIENT_ID=$(az identity list | jq -r --arg MSI_ID "$MSI_ID" '.[] | select(.principalId == $MSI_ID) | .clientId')
-        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e MSI_ID -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_USE_MSI=true ${{ inputs.docker-params }} mcr.microsoft.com/azterraform:latest make ${{ inputs.makefile-target }}
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e MSI_ID -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_USE_MSI=true ${{ inputs.docker-params }} mcr.microsoft.com/azterraform:avm-latest make ${{ inputs.makefile-target }}
