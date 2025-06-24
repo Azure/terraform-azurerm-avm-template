@@ -100,8 +100,6 @@ configuration:
                   label: "Type: New Module Proposal :bulb:"
               - hasLabel:
                   label: "Type: Question/Feedback :raising_hand:"
-              - hasLabel:
-                  label: "Type: Security Bug :lock:"
           - isAssignedToSomeone
         then:
           - removeLabel:
@@ -140,23 +138,6 @@ configuration:
         then:
           - addLabel:
               label: "Type: Bug :bug:"
-
-      - description: 'ITA22 - If the type is security bug, assign the "Type: Security Bug :lock:" label on the issue'
-        if:
-          - payloadType: Issues
-          - isAction:
-              action: Opened
-          - bodyContains:
-              pattern: |
-                ### Issue Type?
-
-                Security Bug
-          - not:
-              hasLabel:
-                label: "Type: Security Bug :lock:"
-        then:
-          - addLabel:
-              label: "Type: Security Bug :lock:"
 
       - description: 'ITA23 - Remove the "Status: In PR" label from an issue when it''s closed.'
         if:
