@@ -7,9 +7,9 @@ runs:
     - name: fmt check
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make fmtcheck
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:avm-latest make fmtcheck
 
     - name: docs check
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make docscheck
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:avm-latest make docscheck

@@ -13,22 +13,22 @@ runs:
     - name: terraform fmt check
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make tffmtcheck
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:avm-latest make tffmtcheck
 
     - name: terraform validate
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID=00000000-0000-0000-0000-000000000000 mcr.microsoft.com/azterraform make tfvalidatecheck
+        docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID=00000000-0000-0000-0000-000000000000 mcr.microsoft.com/azterraform:avm-latest make tfvalidatecheck
 
     - name: terrafmt check
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make terrafmtcheck
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:avm-latest make terrafmtcheck
 
     - name: tflint
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID=00000000-0000-0000-0000-000000000000 mcr.microsoft.com/azterraform make tflint
+        docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID=00000000-0000-0000-0000-000000000000 mcr.microsoft.com/azterraform:avm-latest make tflint
 
     - name: tfsec
       shell: bash

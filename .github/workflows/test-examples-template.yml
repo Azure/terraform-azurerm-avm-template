@@ -30,7 +30,7 @@ jobs:
           export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:latest make conftest
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:avm-latest make conftest
 
   getexamples:
     if: github.event.pull_request.head.repo.fork == false
@@ -89,10 +89,10 @@ jobs:
           export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
-          
+
           if [ -f examples/setup.sh ]; then
             chmod +x examples/setup.sh
-            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src/examples --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:latest ./setup.sh
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src/examples --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:avm-latest ./setup.sh
           fi
         shell: bash
 
@@ -133,8 +133,8 @@ jobs:
           export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
-          
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:latest make test-example
+
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e AVM_EXAMPLE=${{ matrix.example }} -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:avm-latest make test-example
 
   checkteardown:
     runs-on: ubuntu-latest
@@ -180,10 +180,10 @@ jobs:
           export REMOTE_SCRIPT="https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
           curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/prepare-credential.sh" -o prepare-credential.sh
           source ./prepare-credential.sh
-          
+
           if [ -f examples/teardown.sh ]; then
             chmod +x examples/teardown.sh
-            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src/examples --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:latest ./teardown.sh
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/src -w /src/examples --network=host -e TF_IN_AUTOMATION -e TF_VAR_enable_telemetry -e AVM_MOD_PATH=/src -e ARM_SUBSCRIPTION_ID -e ARM_TENANT_ID -e ARM_CLIENT_ID -e ARM_OIDC_REQUEST_TOKEN -e ARM_OIDC_REQUEST_URL -e ARM_USE_OIDC=true --env-file <(env | grep TF_VAR_ | grep -v ' "TF_VAR_') mcr.microsoft.com/azterraform:avm-latest ./teardown.sh
           fi
         id: global-teardown
         shell: bash

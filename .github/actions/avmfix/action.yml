@@ -8,7 +8,7 @@ runs:
     - name: run avmfix
       shell: bash
       run: |
-        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make autofix
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:avm-latest make autofix
 
     - name: detect changes
       shell: bash
@@ -18,7 +18,7 @@ runs:
           exit 0
         else
           echo "AVMfix changes detected, please run:"
-          echo "> docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make pre-commit"
+          echo "> docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:avm-latest make pre-commit"
           echo "... or if you have the avm helper script installed:"
           echo "> ./avm pre-commit"
           echo "> avm.bat pre-commit (on Windows)"
