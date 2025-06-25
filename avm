@@ -1,5 +1,26 @@
 #!/usr/bin/env sh
 
+# Create a temporary copy of this script to avoid self-modification issues
+if [ -z "$AVM_FORKED" ]; then
+  # Create temporary directory and file
+  TEMP_DIR=$(mktemp -d)
+  TEMP_FILE="$TEMP_DIR/avm_$(date +%s)_$RANDOM"
+
+  # Copy the current script to the temporary file
+  cp "$0" "$TEMP_FILE"
+  chmod +x "$TEMP_FILE"
+
+  # Execute the temporary file with AVM_FORKED=1 and all original arguments
+  AVM_FORKED=1 "$TEMP_FILE" "$@"
+  EXIT_CODE=$?
+
+  # Clean up
+  rm -f "$TEMP_FILE"
+  rmdir "$TEMP_DIR"
+
+  exit $EXIT_CODE
+fi
+
 usage () {
   echo "Usage: avm <make target>"
 }
