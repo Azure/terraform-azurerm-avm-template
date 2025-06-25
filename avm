@@ -6,7 +6,8 @@ usage () {
 
 CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-docker}
 
-if [ ! "$(command -v "$CONTAINER_RUNTIME")" ]; then
+
+if [ ! "$(command -v "$CONTAINER_RUNTIME")" ] && [ -z "$AVM_IN_CONTAINER" ]; then
     echo "Error: $CONTAINER_RUNTIME is not installed. Please install $CONTAINER_RUNTIME first."
     exit 1
 fi
