@@ -1,26 +1,26 @@
-@echo on
-SETLOCAL
+@echo off
+SETLOCAL EnableDelayedExpansion
 
 REM Check if this is the original script or a forked copy
 IF NOT DEFINED AVM_FORKED (
     REM Create a temporary directory and file
-    SET TEMP_DIR=%TEMP%\avm_temp_%RANDOM%
-    MKDIR %TEMP_DIR% 2>NUL
-    SET TEMP_FILE=%TEMP_DIR%\avm_%RANDOM%.bat
+    SET TEMP_DIR="%TEMP%\avm_temp_%RANDOM%"
+    MKDIR !TEMP_DIR! 2>NUL
+    SET TEMP_FILE=!TEMP_DIR!\avm_%RANDOM%.bat
 
     REM Copy the current script to the temporary file
-    COPY "avm.bat" %TEMP_FILE% >NUL
+    COPY "avm.bat" !TEMP_FILE! >NUL
 
     REM Execute the temporary file with AVM_FORKED=1 and all original arguments
     SET AVM_FORKED=1
-    CALL %TEMP_FILE% %*
+    CALL !TEMP_FILE! %*
     SET EXIT_CODE=%ERRORLEVEL%
 
     REM Clean up
-    DEL /Q %TEMP_FILE% 2>NUL
-    RMDIR /Q %TEMP_DIR% 2>NUL
+    DEL /Q !TEMP_FILE! 2>NUL
+    RMDIR /Q !TEMP_DIR! 2>NUL
 
-    EXIT /B %EXIT_CODE%
+    EXIT /B !EXIT_CODE!
 )
 
 REM Set CONTAINER_RUNTIME to its current value if it's already set, or docker if it's not
