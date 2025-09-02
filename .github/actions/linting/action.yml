@@ -30,6 +30,16 @@ runs:
       run: |
         docker run --rm -v $(pwd):/src -w /src -e ARM_SUBSCRIPTION_ID=00000000-0000-0000-0000-000000000000 mcr.microsoft.com/azterraform make tflint
 
+    - name: mapotf-precommit check
+      shell: bash
+      run: |
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make mapotf-precommit-check
+
+    - name: grept-precommit check
+      shell: bash
+      run: |
+        docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform make grept-precommit-check
+
     - name: tfsec
       shell: bash
       run: |
