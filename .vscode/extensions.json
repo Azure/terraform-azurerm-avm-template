@@ -1,7 +1,7 @@
 {
   "recommendations": [
-    "azapi-vscode.azapi",
     "EditorConfig.EditorConfig",
-    "hashicorp.terraform"
+    "hashicorp.terraform",
+    "ms-azurertools.vscode-azureterraform"
   ]
 }
