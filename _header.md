@@ -1,3 +1,3 @@
-# terraform-azurerm-avm-template
+# Terraform Azure Verified Module template
 
-This is a template repo for Terraform Azure Verified Modules.
+This minimal AzAPI module template creates one Azure resource group.
