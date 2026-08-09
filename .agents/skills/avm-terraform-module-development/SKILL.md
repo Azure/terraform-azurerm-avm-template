@@ -10,7 +10,7 @@ Azure Verified Modules (AVM) are pre-built, tested, and validated Terraform and 
 
 ## Toolchain
 
-This repository uses the `Avm.Authoring` PowerShell module. It replaces the old `./avm` launchers, `Makefile`, AVM container, and Porch pipelines. Everything runs natively on Windows, Linux, and macOS under PowerShell 7.4+.
+This repository uses the `Avm.Authoring` PowerShell module. It replaces the old `Makefile`, AVM container, and Porch pipelines. Everything runs natively on Windows, Linux, and macOS under PowerShell 7.4+.
 
 | Command | Purpose |
 |---------|---------|
@@ -124,7 +124,7 @@ Import-Module Avm.Authoring
 
 The module downloads and pins the tools it needs (terraform, tflint, terraform-docs, conftest, mapotf) on first use, so there is no separate install step. Set `AVM_NO_AUTO_INSTALL=1` in air-gapped environments and pre-warm the cache with `avm tool install <name>` instead.
 
-The repository-root `./avm`, `avm.bat`, and `avm.ps1` launchers have been removed. Do not use them, and do not set `PORCH_NO_TUI`.
+The repository-root `./avm` and `avm.bat` compatibility launchers remain temporarily, but only print migration guidance and exit with an error. The `avm.ps1` launcher has been removed. Run `avm` from an imported `Avm.Authoring` PowerShell module, and do not set `PORCH_NO_TUI`.
 
 ### Step 1: Start from a clean main branch
 
