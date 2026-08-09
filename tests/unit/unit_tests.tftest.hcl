@@ -25,6 +25,16 @@ run "resource_group" {
     condition     = azapi_resource.this.tags == var.tags
     error_message = "The resource group tags must match the module input."
   }
+
+  assert {
+    condition     = output.name == var.name
+    error_message = "The name output must match the resource group name."
+  }
+
+  assert {
+    condition     = output.resource_id == azapi_resource.this.id
+    error_message = "The resource ID output must match the resource group ID."
+  }
 }
 
 run "invalid_trailing_period" {
