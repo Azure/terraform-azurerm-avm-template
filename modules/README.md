@@ -1,4 +1,3 @@
-# Sub-modules
+# Modules
 
-Create directories for each sub-module if required.
-README.md files will be automatically generated for each sub-module using `terraform-docs`.
+This directory contains reusable Terraform submodules.

@@ -1,7 +1,0 @@
-{
-  "files.eol": "\n",
-  "chat.agent.maxRequests": 500,
-  "chat.math.enabled": true,
-  "chat.todoListTool.enabled": true,
-  "github.copilot.chat.agent.thinkingTool": true
-}
