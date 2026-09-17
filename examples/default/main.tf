@@ -4,7 +4,7 @@ terraform {
   required_providers {
     azapi = {
       source  = "Azure/azapi"
-      version = "~> 2.4"
+      version = "~> 2.12"
     }
   }
 }
@@ -16,4 +16,6 @@ module "resource_group" {
 
   location = "westus3"
   name     = "rg-avm-template-example"
+
+  enable_telemetry = false
 }
